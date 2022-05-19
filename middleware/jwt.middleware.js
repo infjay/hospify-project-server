@@ -1,0 +1,1 @@
+const { expressjwt } = require("express-jwt")
