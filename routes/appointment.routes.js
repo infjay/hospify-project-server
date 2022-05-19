@@ -28,8 +28,8 @@ router.get('/appointments', (req,res,next) => {
 
 //appointments by  ID
 
-router.get('/appointments/:appointmentId', (req,res,next) => {
-    const { patientId } = req.params;
+router.get('/appointments/:appointmentId', (req,res,next) => {   //check this route
+    const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
         res.status(400).json({ message: 'Specified id is not valid' });
