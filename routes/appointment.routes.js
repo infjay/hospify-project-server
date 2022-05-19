@@ -6,22 +6,6 @@ const User = require('../models/User.model');
 const Appointment = require('../models/Appointment.model');
 const { response } = require("express");
 
-//CREATE POST list
-
-router.post('/appointments/create', (req,res,next) => {
-
-    const { date, doctor, patient } = req.body;
-
-    Appointment.create({date, doctor: "", patient: ""})
-    .then(response => res.status(201).json(response))
-    .catch( err => {
-        console.log('error on create appointments route', err)
-        res.status(500).json({
-            message:'error on creating appointment',
-            error: err
-        })
-    })
-})
 
 //GET list of appointments
 
@@ -37,6 +21,24 @@ router.get('/appointments', (req,res,next) => {
             error: e
       })
     });
+})
+
+
+//CREATE POST appointment
+
+router.post('/appointments/create', (req,res,next) => {
+
+    const { date } = req.body;
+
+    Appointment.create({date})
+    .then(response => res.status(201).json(response))
+    .catch( err => {
+        console.log('error on create appointments route', err)
+        res.status(500).json({
+            message:'error on creating appointment',
+            error: err
+        })
+    })
 })
 
 
@@ -62,33 +64,13 @@ router.get('/appointments/:appointmentId', (req,res,next) => {
 })
 
 
- 
-
-//CREATE APPPOINTMENT routes
-
-
-// router.post('/:patientId/appointment/create', (req,res,next) => {
-    
-//     const { _id } = req.payload;
-//     patientId = req.params
-//     date = req.body
-//     doctor = req.payload 
-
-//     Appointment.create()
-// })
-
 //UPDATE APPOINTMENT 
 
 router.put("/appointments/:appointmentId", (req,res, next) => {
     const { appointmentId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
-        res.status(400).json({ message: 'Specified id is not valid' });
-        return;
-      }
-
-    Appointment.findOneAndUpdate(appointmentId)
-    .then( response => console.log(reponse))
+    Appointment.findByIdAndUpdate(appointmentId , req.body, {new:true} )
+    .then( updateAppointment => res.status(200).json(appointment))
     .catch( err => {
         console.log("error updating appointment route", err)
         res.status(500).json({
@@ -110,10 +92,8 @@ router.delete("/appointments/:appointmentId", (req,res, next) => {
         return;
       }
     Appointment.findByIdAndRemove(appointmentId)
-
-
-      .then( () => {
-          res.redirect("/appointments")
+      .then( (response) => {
+          console.log("appointmet deleted succesfully", response)
       })
       .catch( err => {
           console.log("error deleting appointment", err)

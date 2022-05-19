@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     password: {
     type:String,
-    requires:true
+    required:true
   },
   doctor:{
     type: Boolean,
