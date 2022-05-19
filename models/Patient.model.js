@@ -27,6 +27,9 @@ const patientSchema = new Schema({
         type: String,
         required: true
     },
+    
+    doctor : { type: Schema.Types.ObjectId, ref: 'User' },
+    
 
     
 });
