@@ -4,17 +4,16 @@ const { Schema, model } = mongoose;
 
 const appointmentSchema = new Schema(
     {
-    apointment: {
-        date:{
+    date:{
             required:true,
-            format: Date,
+            type: Date,
             },
     doctor: {
         type: Schema.Types.ObjectId, ref:'User'
         },
-    Patient:{
+    patient:{
         type: Schema.Types.ObjectId, ref:'Patient'
-        }}}
+        }}
 )
 
 const Appointment = model("Appointment", appointmentSchema);
