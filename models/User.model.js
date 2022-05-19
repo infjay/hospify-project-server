@@ -16,7 +16,8 @@ const userSchema = new Schema(
     requires:true
   },
   doctor:{
-    default:false
+    type: Boolean,
+    
   },
   specialty:{
     type: String,
