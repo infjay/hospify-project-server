@@ -7,7 +7,7 @@ const Appointment = require('../models/Appointment.model');
 
 //CREATE POST list
 
-router.post
+router.post("/")
 
 //GET list of appointments
 
@@ -29,7 +29,7 @@ router.get('/appointments', (req,res,next) => {
 //appointments by  ID
 
 router.get('/appointments/:appointmentId', (req,res,next) => {
-    const { patientId } = req.params;
+    const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
         res.status(400).json({ message: 'Specified id is not valid' });

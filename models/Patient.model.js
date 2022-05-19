@@ -35,4 +35,4 @@ const patientSchema = new Schema({
 });
 
 
-module.exports = model("Patinet", patientSchema);
+module.exports = model("Patient", patientSchema);
