@@ -4,10 +4,8 @@ const { default: mongoose } = require('mongoose');
 const Patient = require('../models/Patient.model');
 const User = require('../models/User.model');
 const Appointment = require('../models/Appointment.model');
+const { response } = require("express");
 
-//CREATE POST list
-
-router.post
 
 //GET list of appointments
 
@@ -23,6 +21,24 @@ router.get('/appointments', (req,res,next) => {
             error: e
       })
     });
+})
+
+
+//CREATE POST appointment
+
+router.post('/appointments/create', (req,res,next) => {
+
+    const { date } = req.body;
+
+    Appointment.create({date})
+    .then(response => res.status(201).json(response))
+    .catch( err => {
+        console.log('error on create appointments route', err)
+        res.status(500).json({
+            message:'error on creating appointment',
+            error: err
+        })
+    })
 })
 
 
@@ -48,42 +64,41 @@ router.get('/appointments/:appointmentId', (req,res,next) => {
 })
 
 
- 
+//UPDATE APPOINTMENT 
 
-//CREATE APPPOINTMENT routes
+router.put("/appointments/:appointmentId", (req,res, next) => {
+    const { appointmentId } = req.params;
 
-
-router.post('/:patientId/appointment/create', (req,res,next) => {
-    
-    const { _id } = req.payload;
-    patientId = req.params
-    date = req.body
-    doctor = req.payload 
-
-    Appointment.create()
-})
+    Appointment.findByIdAndUpdate(appointmentId , req.body, {new:true} )
+    .then( updateAppointment => res.status(200).json(appointment))
+    .catch( err => {
+        console.log("error updating appointment route", err)
+        res.status(500).json({
+            message:"error updating appointment",
+            error: err
+        });
+    });
+});
 
 
 //DELETE APPOINTMENT 
 
 
-router.delete("/appointment/:appointmentId", (req,res, next) => {
+router.delete("/appointments/:appointmentId", (req,res, next) => {
     const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
         res.status(400).json({ message: 'Specified id is not valid' });
         return;
       }
-
-    
     Appointment.findByIdAndRemove(appointmentId)
-      .then( () => {
-          res.redirect("/appointments")
+      .then( (response) => {
+          console.log("appointmet deleted succesfully", response)
       })
       .catch( err => {
           console.log("error deleting appointment", err)
           res.status(500).json({
-              message: "error getting list of appointments",
+              message: "error deleting appointments",
               error: err
           });
       });
