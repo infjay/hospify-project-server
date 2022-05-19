@@ -77,7 +77,9 @@ router.delete("/appointment/:appointmentId", (req,res, next) => {
 
     
     Appointment.findByIdAndRemove(appointmentId)
-      .then()
+      .then( () => {
+          res.redirect("/appointments")
+      })
       .catch( err => {
           console.log("error deleting appointment", err)
           res.status(500).json({
