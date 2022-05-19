@@ -17,8 +17,11 @@ const userSchema = new Schema(
   },
   doctor:{
     default:false
-  }
   },
+  specialty:{
+    type: String,
+    required:true
+  }},
 
 );
 
