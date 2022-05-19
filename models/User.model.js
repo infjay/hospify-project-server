@@ -21,7 +21,7 @@ const userSchema = new Schema(
   specialty:{
     type: String,
     required:true
-  }},
+  }}
 
 );
 
