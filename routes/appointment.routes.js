@@ -36,7 +36,7 @@ router.get('/appointments/:appointmentId', (req,res,next) => {   //check this ro
         return;
       }
 
-    Patient.findById(appointmentId)
+    Appointment.findById(appointmentId)
       .then( appointment => res.status(200).json(appointment))
       .catch( err => {
         console.log("error getting list of projects", err);
