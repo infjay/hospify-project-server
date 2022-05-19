@@ -28,7 +28,7 @@ router.get('/appointments', (req,res,next) => {
 
 //appointments by  ID
 
-router.get('/appointments/:appointmentId', (req,res,next) => {   //check this route
+router.get('/appointments/:appointmentId', (req,res,next) => {
     const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
