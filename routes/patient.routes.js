@@ -33,7 +33,11 @@ router.post('/patients', (req, res, next) => {
 
 
 router.get('/patients', (req, res, next) => {
-    Patient.find()
+
+    const {id} = req.payload._id
+    console.log(payload);
+
+    Patient.find({doctor: id})
         .populate("appointments")
         .then(response => {
             res.json(response)
