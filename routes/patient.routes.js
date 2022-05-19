@@ -3,7 +3,7 @@ const router =  require('express').Router();
 const Patient = require('../models/Patient.model');
 const Appointment = require('../models/Appointment.model');
 const User = require('../models/User.model');
-
+const {isAuthenticated} = require('../middleware/jwt.middleware')
 // Create a new Patient
 router.post('/patients', (req, res, next) => {
     const { firstName, lastName, email, birthDate, bloodType, description,userId } = req.body;
@@ -20,11 +20,10 @@ router.post('/patients', (req, res, next) => {
 
     Patient.Create(newPatient)
         .then((patientsFromDB) => {
-            return User.findByIdAndUpdate(userId, {$push: { patients: patientsFromDB._id }});
+         User.findByIdAndUpdate(userId, {$push: { patients: patientsFromDB._id }});
+         res.status(201).json(response)
         })
-        .then( response => {
-            res.status(201).json(response)
-        })
+
         .catch(err => res.json(err));
 })
 
@@ -32,14 +31,15 @@ router.post('/patients', (req, res, next) => {
 // get the list of patients
 
 
-router.get('/patients', (req, res, next) => {
+router.get('/patients', isAuthenticated,  (req, res, next) => {
 
     const {id} = req.payload._id
-    console.log(payload);
+   
 
-    Patient.find({doctor: id})
-        .populate("appointments")
+    Patient.find()
+        // .populate("appointments")
         .then(response => {
+            console.log(response);
             res.json(response)
         })
         .catch(err => {
@@ -52,6 +52,7 @@ router.get('/patients', (req, res, next) => {
 })
 
 // get the list of specific patient by id
+
 
 
 router.get('/patient/:patientId', (req, res, next) => {
