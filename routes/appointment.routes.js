@@ -7,7 +7,7 @@ const Appointment = require('../models/Appointment.model');
 
 //CREATE POST list
 
-router.post("/")
+router.post
 
 //GET list of appointments
 
