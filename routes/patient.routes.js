@@ -5,9 +5,13 @@ const Appointment = require('../models/Appointment.model');
 const User = require('../models/User.model');
 const {isAuthenticated} = require('../middleware/jwt.middleware')
 // Create a new Patient
-router.post('/patients', (req, res, next) => {
-    const { firstName, lastName, email, birthDate, bloodType, description,userId } = req.body;
 
+
+router.post('/patients', isAuthenticated, (req, res, next) => {
+    const { firstName, lastName, email, birthDate, bloodType, description } = req.body;
+
+    const doctor = req.payload._id
+    console.log(doctor);
     const newPatient = {
         firstName,
         lastName,
@@ -15,17 +19,27 @@ router.post('/patients', (req, res, next) => {
         birthDate,
         bloodType,
         description,
-        doctor: userId
+        doctor
     }
-
-    Patient.Create(newPatient)
-        .then((patientsFromDB) => {
-         User.findByIdAndUpdate(userId, {$push: { patients: patientsFromDB._id }});
-         res.status(201).json(response)
+    console.log(newPatient);
+    Patient.create(newPatient)
+    .then(response => res.status(201).json(response))
+    .catch( err => {
+        console.log('error on create patient route', err)
+        res.status(500).json({
+            message:'error on creating patient',
+            error: err
         })
+    })
 
-        .catch(err => res.json(err));
-})
+//     Patient.Create({newPatient})
+//         .then((patientsFromDB) => {
+//          User.findByIdAndUpdate(userId, {$push: { patients: patientsFromDB._id }});
+//          res.status(201).json(response)
+//         })
+
+//         .catch(err => res.json(err));
+ })
 
 
 // get the list of patients
@@ -55,7 +69,7 @@ router.get('/patients', isAuthenticated,  (req, res, next) => {
 
 
 
-router.get('/patient/:patientId', (req, res, next) => {
+router.get('/patients/:patientId', (req, res, next) => {
     const {patientId} = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(patientId)){
@@ -77,7 +91,7 @@ Patient.findById(patientId)
 
 
 // Update a details of a patient
-router.put('/patient/:patientId', (req, res, next )=> {
+router.put('/patients/:patientId', (req, res, next )=> {
     const {patientId} = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(patientId)) {
