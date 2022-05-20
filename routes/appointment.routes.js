@@ -70,7 +70,7 @@ router.put("/appointments/:appointmentId", (req,res, next) => {
     const { appointmentId } = req.params;
 
     Appointment.findByIdAndUpdate(appointmentId , req.body, {new:true} )
-    .then( updateAppointment => res.status(200).json(appointment))
+    .then( updateAppointment => res.status(200).json(updateAppointment))
     .catch( err => {
         console.log("error updating appointment route", err)
         res.status(500).json({
