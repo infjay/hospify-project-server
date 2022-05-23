@@ -8,8 +8,13 @@ const userSchema = new Schema(
       type: String,
       required:true,
       unique:true
-
       // unique: true -> Ideally, should be unique, but its up to you
+    },
+    firstName:{
+      type:String
+    },
+    lastName: {
+      type:String
     },
     password: {
     type:String,

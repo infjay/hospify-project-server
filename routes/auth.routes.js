@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const {isAuthenticated} = require("../middleware/jwt.middleware");
 const User = require("../models/User.model");
+const { token } = require("morgan");
 
 const router = express.Router();
 const saltRounds = 10;
@@ -57,7 +58,7 @@ router.post('/signup', (req, res, next) => {
 
             // Create a new object that doesn't expose the password
             const user = { email, _id };
-
+            const payload = { _id: createdUser._id };
             // Send a json response containing the user object
             res.status(201).json({ user: user });
         })
@@ -67,6 +68,16 @@ router.post('/signup', (req, res, next) => {
         });
 });
 
+// Get user info 
+
+router.get('/login', isAuthenticated, (req,res,next) => {
+    console.log(token)
+    User.findById(req.payload._id)
+    .then( response => {
+        res.json({response})
+    })
+    .catch( err => res.status(400).json("error in route to get info from user", err))
+})
 
 // Login
 router.post('/login', (req, res, next) => {
@@ -94,7 +105,7 @@ router.post('/login', (req, res, next) => {
             if (passwordCorrect) { // login was successful
 
                 // Deconstruct the user object to omit the password
-                const { _id, email } = foundUser;
+                const { _id, email} = foundUser;
 
                 // Create an object that will be set as the token payload
                 const payload = { _id, email };
@@ -108,7 +119,7 @@ router.post('/login', (req, res, next) => {
 
                 // Send the token as the response
                 console.log(authToken);
-                res.json({ authToken: authToken });
+                res.json({ authToken: authToken , foundUser : foundUser});
             }
             else {
                 res.status(401).json({ message: "Unable to authenticate the user" });
