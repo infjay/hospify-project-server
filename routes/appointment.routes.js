@@ -1,15 +1,14 @@
 const router = require("express").Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 const { default: mongoose } = require('mongoose');
-const Patient = require('../models/Patient.model');
-const User = require('../models/User.model');
 const Appointment = require('../models/Appointment.model');
 const { response } = require("express");
 
 
 //GET list of appointments
 
-router.get('/appointments', (req,res,next) => {
+router.get('/appointments',isAuthenticated, (req,res,next) => {
     Appointment.find()
     .populate("patient")
     .populate("doctor")
@@ -28,7 +27,7 @@ router.get('/appointments', (req,res,next) => {
 
 //CREATE POST appointment
 
-router.post('/appointments', (req,res,next) => {
+router.post('/appointments', isAuthenticated,  (req,res,next) => {
 
     const { date, doctor, patient, time } = req.body;
     console.log("date", req.body.date)
@@ -48,7 +47,7 @@ router.post('/appointments', (req,res,next) => {
 
 //appointments by  ID
 
-router.get('/appointments/:appointmentId', (req,res,next) => {
+router.get('/appointments/:appointmentId', isAuthenticated, (req,res,next) => {
     const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
@@ -70,7 +69,7 @@ router.get('/appointments/:appointmentId', (req,res,next) => {
 
 //UPDATE APPOINTMENT 
 
-router.put("/appointments/:appointmentId", (req,res, next) => {
+router.put("/appointments/:appointmentId", isAuthenticated,(req,res, next) => {
     const { appointmentId } = req.params;
 
     Appointment.findByIdAndUpdate(appointmentId , req.body, {new:true} )
@@ -88,7 +87,7 @@ router.put("/appointments/:appointmentId", (req,res, next) => {
 //DELETE APPOINTMENT 
 
 
-router.delete("/appointments/:appointmentId", (req,res, next) => {
+router.delete("/appointments/:appointmentId", isAuthenticated, (req,res, next) => {
     const { appointmentId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
