@@ -30,9 +30,11 @@ router.get('/appointments', (req,res,next) => {
 
 router.post('/appointments', (req,res,next) => {
 
-    const { date, doctor, patient } = req.body;
-    console.log(date)
-    Appointment.create({date, doctor, patient})
+    const { date, doctor, patient, time } = req.body;
+    console.log("date", req.body.date)
+  
+
+    Appointment.create({date, doctor, patient, time})
     .then(response => res.status(201).json(response))
     .catch( err => {
         console.log('error on create appointments route', err)

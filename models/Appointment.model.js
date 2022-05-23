@@ -6,8 +6,12 @@ const appointmentSchema = new Schema(
     {
     date:{
             required:true,
-            type: Date,
+            type: String,
             },
+    time:{
+        required:true,
+        type: String
+    },
     doctor: {
         type: Schema.Types.ObjectId, ref:'User'
         },
