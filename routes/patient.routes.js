@@ -1,15 +1,39 @@
 const router =  require('express').Router();
+const { default: mongoose } = require('mongoose');
 
 const Patient = require('../models/Patient.model');
 const Appointment = require('../models/Appointment.model');
 const User = require('../models/User.model');
 const {isAuthenticated} = require('../middleware/jwt.middleware')
+
+
+// get the list of patients
+
+
+router.get('/patients', isAuthenticated,  (req, res, next) => {
+
+    const {id} = req.payload._id
+    Patient.find()
+        // .populate("appointments")
+        .then(response => {
+            console.log(response);
+            res.json(response)
+        })
+        .catch(err => {
+            console.log("error getting the list of patients");
+            res.status(500).json({
+                message: "error getting the list of patients",
+                error: err
+                });
+        })
+})
+
 // Create a new Patient
 
 
 router.post('/patients', isAuthenticated, (req, res, next) => {
     const { firstName, lastName, email, birthDate, bloodType, description } = req.body;
-
+    console.log("hello")
     const doctor = req.payload._id
     console.log(doctor);
     const newPatient = {
@@ -42,28 +66,7 @@ router.post('/patients', isAuthenticated, (req, res, next) => {
  })
 
 
-// get the list of patients
 
-
-router.get('/patients', isAuthenticated,  (req, res, next) => {
-
-    const {id} = req.payload._id
-   
-
-    Patient.find()
-        // .populate("appointments")
-        .then(response => {
-            console.log(response);
-            res.json(response)
-        })
-        .catch(err => {
-            console.log("error getting the list of patients");
-            res.status(500).json({
-                message: "error getting the list of patients",
-                error: err
-                });
-        })
-})
 
 // get the list of specific patient by id
 

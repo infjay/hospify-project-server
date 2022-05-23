@@ -11,6 +11,8 @@ const { response } = require("express");
 
 router.get('/appointments', (req,res,next) => {
     Appointment.find()
+    .populate("patient")
+    .populate("doctor")
     .then( (response) => {
         res.json(response)
     })
@@ -26,11 +28,11 @@ router.get('/appointments', (req,res,next) => {
 
 //CREATE POST appointment
 
-router.post('/appointments/create', (req,res,next) => {
+router.post('/appointments', (req,res,next) => {
 
-    const { date } = req.body;
-
-    Appointment.create({date})
+    const { date, doctor, patient } = req.body;
+    console.log(date)
+    Appointment.create({date, doctor, patient})
     .then(response => res.status(201).json(response))
     .catch( err => {
         console.log('error on create appointments route', err)
