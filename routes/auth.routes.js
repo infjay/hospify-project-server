@@ -74,9 +74,10 @@ router.get('/login', isAuthenticated, (req,res,next) => {
     console.log(token)
     User.findById(req.payload._id)
     .then( response => {
-        res.json({response})
+        User.find()
+            .then(allDocs => res.json({response, allDocs}))
     })
-    .catch( err => res.status(400).json("error in route to get info from user", err))
+    .catch( err => res.status(400).json("error in route to get info from doctor", err))
 })
 
 // Login

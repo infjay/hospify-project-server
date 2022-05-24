@@ -3,7 +3,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 const { default: mongoose } = require('mongoose');
 const Appointment = require('../models/Appointment.model');
-const { response } = require("express");
+
 
 
 //GET list of appointments
@@ -49,6 +49,7 @@ router.post('/appointments', isAuthenticated,  (req,res,next) => {
 
 router.get('/appointments/:appointmentId', isAuthenticated, (req,res,next) => {
     const { appointmentId } = req.params;
+    
 
     if (!mongoose.Types.ObjectId.isValid(appointmentId)) {
         res.status(400).json({ message: 'Specified id is not valid' });
@@ -73,6 +74,7 @@ router.get('/appointments/:appointmentId', isAuthenticated, (req,res,next) => {
 
 router.put("/appointments/:appointmentId", isAuthenticated,(req,res, next) => {
     const { appointmentId } = req.params;
+    const { date, doctor, patient, time } = req.body;
 
     Appointment.findByIdAndUpdate(appointmentId , req.body, {new:true} )
     .then( updateAppointment => res.status(200).json(updateAppointment))
