@@ -16,7 +16,7 @@ const patientSchema = new Schema({
         required: true
     },
     birthDate: {
-        type: Date,
+        type: String,
         required: true,
     },
     bloodType: {

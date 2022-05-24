@@ -56,6 +56,8 @@ router.get('/appointments/:appointmentId', isAuthenticated, (req,res,next) => {
       }
 
     Appointment.findById(appointmentId)
+      .populate('doctor')
+      .populate('patient')
       .then( appointment => res.status(200).json(appointment))
       .catch( err => {
         console.log("error getting list of projects", err);
