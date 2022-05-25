@@ -20,10 +20,6 @@ const userSchema = new Schema(
     type:String,
     required:true
   },
-  doctor:{
-    type: Boolean,
-    
-  },
   specialty:{
     type: String,
     required:true
