@@ -30,8 +30,6 @@ router.get('/appointments',isAuthenticated, (req,res,next) => {
 router.post('/appointments', isAuthenticated,  (req,res,next) => {
 
     const { date, doctor, patient, time } = req.body;
-    console.log("date", req.body.date)
-  
 
     Appointment.create({date, doctor, patient, time})
     .then(response => res.status(201).json(response))
