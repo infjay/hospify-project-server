@@ -96,9 +96,9 @@ router.delete("/appointments/:appointmentId", isAuthenticated, (req,res, next) =
         res.status(400).json({ message: 'Specified id is not valid' });
         return;
       }
-    Appointment.findByIdAndRemove(appointmentId)
+    Appointment.findByIdAndDelete(appointmentId)
       .then( (response) => {
-          console.log("appointmet deleted succesfully", response)
+          res.json({ message: "appointmet deleted succesfully"})
       })
       .catch( err => {
           console.log("error deleting appointment", err)
