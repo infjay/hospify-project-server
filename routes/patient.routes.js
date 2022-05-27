@@ -75,6 +75,7 @@ router.get("/patients/:patientId", (req, res, next) => {
 // Update a details of a patient
 router.put("/patients/:patientId", (req, res, next) => {
   const { patientId } = req.params;
+  console.log("update patient", req.body)
 
   if (!mongoose.Types.ObjectId.isValid(patientId)) {
     res.status(400).json({ message: "Specified id is not Valid" });
